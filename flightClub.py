@@ -193,4 +193,4 @@ class FlightClub(AltitudeMod):
 
 
 if __name__ == '__main__':
-    FlightClub(27282, "/altitude-files", lobby="lobby_club").run()
+    FlightClub(27282, "/altitude", lobby="lobby_club").run()
