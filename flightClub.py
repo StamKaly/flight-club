@@ -90,21 +90,18 @@ class FlightClub(AltitudeMod):
                     break
             if not found:
                 players[player_found].append(-1)
-        print(players)
         if players[0][1] == -1:
             if players[1][1] == -1:
                 pass
             else:
                 team = self.teams[players[1][1]]
                 team[team.index(players[1][0])] = players[0][0]
-                self.teams[players[0][1]].remove(players[0][0])
                 if self.mode == "tourny":
                     self.commands.modify_tournament(players[0][0].nickname, players[1][1])
                     self.commands.modify_tournament(players[1][0].nickname, -1)
         elif players[1][1] == -1:
             team = self.teams[players[0][1]]
             team[team.index(players[0][0])] = players[1][0]
-            self.teams[players[1][1]].remove(players[1][0])
             if self.mode == "tourny":
                 self.commands.modify_tournament(players[1][0].nickname, players[0][1])
                 self.commands.modify_tournament(players[0][0].nickname, -1)
@@ -150,16 +147,13 @@ class FlightClub(AltitudeMod):
             if self.mode == "tourny":
                 self.commands.modify_everyone(-1)
         elif message == ".tourny":
-            print(self.teams)
             if not self.teams[0] or not self.teams[1]:
-                print("first check runs")
                 self.commands.whisper(player.nickname, "Need at least one player per team to start a tournament!")
             else:
-                print("else runs")
-                self.commands.start_tournament()
                 for team in range(2):
                     for player_found in self.teams[team]:
-                        self.commands.modify_tournament(player_found.nickname, team)
+                        self.commands.assign_team(player_found.nickname, team)
+                self.commands.start_tournament()
                 self.mode = "tourny"
         elif message == ".stop":
             if self.mode == "tourny":
