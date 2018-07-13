@@ -134,4 +134,4 @@ class FlightClub(AltitudeMod):
                 self.swap(player, *parts)
             else:
                 self.commands.whisper(player.nickname, "Wrong structure of function.")
-                self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname1> <nickname 2>"')
+                self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname 1> <nickname 2>"')
