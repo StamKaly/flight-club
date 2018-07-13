@@ -116,11 +116,20 @@ class FlightClub(AltitudeMod):
                 self.commands.modify_tournament(players[0][0].nickname, players[1][1])
                 self.commands.modify_tournament(players[1][0].nickname, players[0][1])
 
+    def swap_teams(self):
+        self.teams.reverse()
+        if self.mode == "tourny":
+            for team in range(2):
+                for player_found in self.teams[team]:
+                    self.commands.modify_tournament(player_found.nickname, team)
+
     def on_client_add(self, player):
         self.commands.message("Please welcome {} to flight club,".format(player.nickname))
         self.commands.message("the place where good alitutude happens!")
 
     def on_chat(self, player, message, server_message, team_message):
+        if message == ".ping":
+            self.commands.message("pong")
         if message.startswith(".move"):
             parts = message.split()[1:]
             if len(parts) == 2:
@@ -135,3 +144,53 @@ class FlightClub(AltitudeMod):
             else:
                 self.commands.whisper(player.nickname, "Wrong structure of function.")
                 self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname 1> <nickname 2>"')
+        elif message == ".clear":
+            self.teams = [[], []]
+            if self.mode == "tourny":
+                self.commands.modify_everyone(-1)
+        elif message == ".tourny":
+            if len(self.teams[0]) <= 1 or len(self.teams[1]) <= 1:
+                self.commands.whisper(player.nickname, "Need at least one player per team to start a tournament!")
+            self.commands.start_tournament()
+            for team in range(2):
+                for player_found in self.teams[team]:
+                    self.commands.modify_tournament(player_found.nickname, team)
+            self.mode = "tourny"
+        elif message == ".stop":
+            if self.mode == "tourny":
+                self.commands.stop_tournament()
+            self.mode = "stop"
+            self.commands.assign_everyone(-1)
+            self.commands.message("The game is stopped. No players will be allowed to spawn.")
+        elif message == ".free":
+            if self.mode == "tourny":
+                self.commands.stop_tournament()
+            self.mode = "free"
+            self.commands.message("Free mode: everyone is allowed to spawn!")
+        elif message == ".teams":
+            if len(self.teams[0]) == 0:
+                if len(self.teams[1]) == 0:
+                    self.commands.message("Teams are both empty!")
+                else:
+                    self.commands.message("Left team is empty.")
+                    self.commands.message("Right team: {}".format(", ".join(
+                        [player_found.nickname for player_found in self.teams[1]])))
+            elif len(self.teams[1]) == 0:
+                self.commands.message("Left team: {}".format(", ".join(
+                    [player_found.nickname for player_found in self.teams[0]])))
+                self.commands.message("Right team is empty.")
+            else:
+                for team_name, team in zip(["Left", "Right"], self.teams):
+                    self.commands.message("{} team: {}".format(team_name, ", ".join(
+                        [player_found.nickname for player_found in team])))
+
+    def on_spawn(self, player, plane, red_perk, green_perk, blue_perk, skin, team):
+        if self.mode == "stop":
+            self.commands.assign_team(player.nickname, -1)
+
+    def on_client_add(self, player):
+        self.commands.message("{} is joining...".format(player.nickname))
+
+
+if __name__ == '__main__':
+    FlightClub(27282, "/altitude-files", lobby="lobby_club").run()

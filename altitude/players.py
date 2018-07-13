@@ -55,6 +55,8 @@ class Players:
                 break
         if self.lobby and len(self.players) == 0:
             self.commands.change_map(self.lobby)
+            self.main.teams = [[], []]
+            self.main.mode = "free"
 
     def nickname_change(self, old_nickname, new_nickname):
         for player in self.players:
