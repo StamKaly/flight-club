@@ -57,9 +57,10 @@ class FlightClub(AltitudeMod):
                     if found:
                         break
 
-                if position == -1 and not found:
-                    self.commands.whisper(player.nickname,
-                                          "{} is already just another spec.".format(player_found.nickname))
+                if position == -1:
+                    if not found:
+                        self.commands.whisper(player.nickname,
+                                              "{} is already just another spec.".format(player_found.nickname))
 
                 else:
                     self.teams[position].append(player_found)
