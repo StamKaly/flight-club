@@ -26,7 +26,6 @@ class FlightClub(AltitudeMod):
             return matched_players[0]
 
     def find_position(self, position):
-        print(self.map_team_colours)
         if position == "spec":
             return -1
         elif position == "left" or position.lower() == self.map_team_colours[0]:
@@ -48,19 +47,19 @@ class FlightClub(AltitudeMod):
             if position is None:
                 self.commands.whisper(player.nickname, 'Team can be "left", "right" or "spec"!')
             else:
-                if position == -1:
-                    found = False
-                    for team in self.teams:
-                        for team_player in team:
-                            if team_player is player_found:
-                                team.remove(team_player)
-                                found = True
-                                break
-                        if found:
+                found = False
+                for team in self.teams:
+                    for team_player in team:
+                        if team_player is player_found:
+                            team.remove(team_player)
+                            found = True
                             break
-                    if not found:
-                        self.commands.whisper(player.nickname,
-                                              "{} isn't assigned to any team.".format(player_found.nickname))
+                    if found:
+                        break
+
+                if position == -1 and not found:
+                    self.commands.whisper(player.nickname,
+                                          "{} is already just another spec.".format(player_found.nickname))
 
                 else:
                     self.teams[position].append(player_found)
@@ -99,12 +98,14 @@ class FlightClub(AltitudeMod):
             else:
                 team = self.teams[players[1][1]]
                 team[team.index(players[1][0])] = players[0][0]
+                self.teams[players[0][1]].remove(players[0][0])
                 if self.mode == "tourny":
                     self.commands.modify_tournament(players[0][0].nickname, players[1][1])
                     self.commands.modify_tournament(players[1][0].nickname, -1)
         elif players[1][1] == -1:
             team = self.teams[players[0][1]]
             team[team.index(players[0][0])] = players[1][0]
+            self.teams[players[1][1]].remove(players[1][0])
             if self.mode == "tourny":
                 self.commands.modify_tournament(players[1][0].nickname, players[0][1])
                 self.commands.modify_tournament(players[0][0].nickname, -1)
