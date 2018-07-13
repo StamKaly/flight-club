@@ -4,11 +4,11 @@ from altitude import AltitudeMod
 class FlightClub(AltitudeMod):
     def on_server_map_change(self, map_name, mode, right_team, left_team):
         self.map_team_colours = [right_team, left_team]
-        if map_name.startwith("1lh") and not self.onelh:
+        if map_name.startswith("1lh") and not self.onelh:
             self.onelh = True
             self.commands.disable_weapon("secondary")
             self.commands.health_modifier(1)
-        elif not map_name.startwith("1lh") and self.onelh:
+        elif not map_name.startswith("1lh") and self.onelh:
             self.onelh = False
             self.commands.disable_weapon("nothing")
             self.commands.health_modifier(100)
