@@ -90,6 +90,7 @@ class FlightClub(AltitudeMod):
                     break
             if not found:
                 players[player_found].append(-1)
+        print(players)
         if players[0][1] == -1:
             if players[1][1] == -1:
                 pass
@@ -149,7 +150,8 @@ class FlightClub(AltitudeMod):
             if self.mode == "tourny":
                 self.commands.modify_everyone(-1)
         elif message == ".tourny":
-            if len(self.teams[0]) == 0 or len(self.teams[1]) == 0:
+            print(self.teams)
+            if not self.teams[0] or not self.teams[1]:
                 self.commands.whisper(player.nickname, "Need at least one player per team to start a tournament!")
             else:
                 self.commands.start_tournament()
