@@ -3,7 +3,7 @@ from altitude import AltitudeMod
 
 class FlightClub(AltitudeMod):
     def on_server_map_change(self, map_name, mode, right_team, left_team):
-        self.map_team_colours = [right_team, left_team]
+        self.map_team_colours = [left_team, right_team]
         if map_name.startswith("1lh") and not self.onelh:
             self.onelh = True
             self.commands.disable_weapon("secondary")
@@ -26,6 +26,7 @@ class FlightClub(AltitudeMod):
             return matched_players[0]
 
     def find_position(self, position):
+        print(self.map_team_colours)
         if position == "spec":
             return -1
         elif position == "left" or position.lower() == self.map_team_colours[0]:
@@ -44,7 +45,7 @@ class FlightClub(AltitudeMod):
             self.commands.whisper(player.nickname, "Be more specific!")
         else:
             position = self.find_position(position)
-            if not position:
+            if position is None:
                 self.commands.whisper(player.nickname, 'Team can be "left", "right" or "spec"!')
             else:
                 if position == -1:
