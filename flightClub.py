@@ -154,6 +154,8 @@ class FlightClub(AltitudeMod):
                     self.commands.multiple_whispers(player.nickname,
                                                     ["Wrong structure of function.",
                                                      'Please use it like this: ".swap <nickname 1> <nickname 2>"'])
+            elif message == ".swapteams":
+                self.swap_teams()
             elif message == ".clear":
                 self.teams = [[], []]
                 if self.mode == "tourny":
