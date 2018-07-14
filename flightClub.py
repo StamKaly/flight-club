@@ -1,4 +1,4 @@
-from altitude import AltitudeMod, teamno_to_team_colour
+from altitude import AltitudeMod
 
 
 class FlightClub(AltitudeMod):
@@ -208,7 +208,7 @@ class FlightClub(AltitudeMod):
         if self.mode == "stop":
             self.commands.assign_team(player.nickname, -1)
         elif self.onelh and plane != "Biplane" and red_perk != "Heavy Cannon":
-            position = self.find_position(teamno_to_team_colour(team))
+            position = self.find_position(team)
             if self.mode == "tourny":
                 self.commands.modify_tournament(player.nickname, position)
             else:
