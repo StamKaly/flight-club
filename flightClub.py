@@ -201,8 +201,8 @@ class FlightClub(AltitudeMod):
                     if player_found.vapor_id in self.admins:
                         admins.append(player_found.nickname)
                 if admins:
-                    self.commands.message("Admin{} currently online: ".format("s" if len(admins) > 1 else '')
-                                          .join(admins))
+                    self.commands.multiple_messages(["Admin{} currently online:".format("s" if len(admins) > 1 else ''),
+                                                     ", ".format(admins)])
 
     def on_spawn(self, player, plane, red_perk, green_perk, blue_perk, skin, team):
         if self.mode == "stop":

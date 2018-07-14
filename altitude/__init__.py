@@ -56,7 +56,7 @@ class AltitudeMod:
         self.teams = [[], []]
         self.mode = "free"
         self.map_team_colours = ["red", "blue"]
-        self.onelh = True
+        self.onelh = False
 
     def parse(self, decoded):
         try:
