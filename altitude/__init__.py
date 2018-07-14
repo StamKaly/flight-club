@@ -31,6 +31,28 @@ class AltitudeMod:
         self.players.get_commands_object(self.commands)
         self.current_line = 0
 
+        self.admins = ["5640761e-f165-4f40-b3d6-3e3167dd767d",  # duck
+                       "f4d0b170-2877-4a92-90eb-eb950a57c636",  # stam
+                       "c9e24c41-292d-4d40-b76c-230d8f30ef32",  # stam2
+                       "faa8061c-5cd6-43bb-b389-561be0792b33",  # kafka
+                       "55dd4345-53e2-4a5d-b6e1-7ca357c7337d",  # label
+                       "7c29079d-5ead-4136-8b1d-467513350b79",  # demv
+                       "b61aa791-7cc3-44bf-bba0-1c7faa9009a9",  # toma
+                       "31456ecc-b5f2-4615-88b4-c4aeadcbf0a7",  # golden
+                       "bf60335d-784f-4f31-98f8-3e0bb591b8c2",  # moxy
+                       "8612de03-f66c-4281-9d7b-8b751837a3c6",  # jonus
+                       "2f2101b2-bfda-4f95-8f6d-a590992d8108",  # max
+                       "92f40cad-d09f-48b4-b165-5d3c3d97f26c",  # brutal
+                       "02a33655-b2eb-42c2-bc88-fff24240f0d8",  # phyx
+                       "0aa6b54c-52b4-4fa7-b2b4-0dc0c8350dd0",  # paiza
+                       "d2ade87e-09a6-4ff9-af7b-9ae9f58fd570",  # elusive
+                       "5ec76fe2-7074-4926-8873-a0e2bf2d9ba5",  # dmcm
+                       "ba9e19db-2cec-4c01-b984-14ca9313f9ff",  # rawr
+                       "0d754ee7-0a53-4bbf-bb9f-1c7e88ca0ee9",  # tolis
+                       "25c28e39-8c93-4adb-91c0-783cb9d75959",  # nick
+                       "a9d97c25-09a5-432f-b221-7e3162296424"  # lewish
+                       ]
+
         self.teams = [[], []]
         self.mode = "free"
         self.map_team_colours = ["red", "blue"]

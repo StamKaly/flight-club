@@ -122,73 +122,87 @@ class FlightClub(AltitudeMod):
                     self.commands.modify_tournament(player_found.nickname, team)
 
     def on_client_add(self, player):
-        self.commands.message("Please welcome {} to flight club,".format(player.nickname))
-        self.commands.message("the place where good alitutude happens!")
+        self.commands.message("{} is joining...".format(player.nickname))
+        # self.commands.message("Please welcome {} to flight club,".format(player.nickname))
+        # self.commands.message("the place where good alitutude happens!")
+
+    def check_if_admin(self, player):
+        for admin in self.admins:
+            if player.vapor_id == admin:
+                return True
+        return False
 
     def on_chat(self, player, message, server_message, team_message):
-        if message == ".ping":
-            self.commands.message("pong")
-        if message.startswith(".move"):
-            parts = message.split()[1:]
-            if len(parts) == 2:
-                self.move(player, *parts)
-            else:
-                self.commands.whisper(player.nickname, "Wrong structure of function.")
-                self.commands.whisper(player.nickname, 'Please use it like this: ".move <nickname> <team>"')
-        elif message.startswith(".swap"):
-            parts = message.split()[1:]
-            if len(parts) == 2:
-                self.swap(player, *parts)
-            else:
-                self.commands.whisper(player.nickname, "Wrong structure of function.")
-                self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname 1> <nickname 2>"')
-        elif message == ".clear":
-            self.teams = [[], []]
-            if self.mode == "tourny":
-                self.commands.modify_everyone(-1)
-        elif message == ".tourny":
-            if not self.teams[0] or not self.teams[1]:
-                self.commands.whisper(player.nickname, "Need at least one player per team to start a tournament!")
-            else:
-                for team in range(2):
-                    for player_found in self.teams[team]:
-                        self.commands.assign_team(player_found.nickname, team)
-                self.commands.start_tournament()
-                self.mode = "tourny"
-        elif message == ".stop":
-            if self.mode == "tourny":
-                self.commands.stop_tournament()
-            self.mode = "stop"
-            self.commands.assign_everyone(-1)
-            self.commands.message("The game is stopped. No players will be allowed to spawn.")
-        elif message == ".free":
-            if self.mode == "tourny":
-                self.commands.stop_tournament()
-            self.mode = "free"
-            self.commands.message("Free mode: everyone is allowed to spawn!")
-        elif message == ".teams":
-            if len(self.teams[0]) == 0:
-                if len(self.teams[1]) == 0:
-                    self.commands.message("Teams are both empty!")
+        if self.check_if_admin(player):
+            if message == ".ping":
+                self.commands.message("pong")
+            elif message.startswith(".move"):
+                parts = message.split()[1:]
+                if len(parts) == 2:
+                    self.move(player, *parts)
                 else:
-                    self.commands.message("Left team is empty.")
-                    self.commands.message("Right team: {}".format(", ".join(
-                        [player_found.nickname for player_found in self.teams[1]])))
-            elif len(self.teams[1]) == 0:
-                self.commands.message("Left team: {}".format(", ".join(
-                    [player_found.nickname for player_found in self.teams[0]])))
-                self.commands.message("Right team is empty.")
-            else:
-                for team_name, team in zip(["Left", "Right"], self.teams):
-                    self.commands.message("{} team: {}".format(team_name, ", ".join(
-                        [player_found.nickname for player_found in team])))
+                    self.commands.whisper(player.nickname, "Wrong structure of function.")
+                    self.commands.whisper(player.nickname, 'Please use it like this: ".move <nickname> <team>"')
+            elif message.startswith(".swap"):
+                parts = message.split()[1:]
+                if len(parts) == 2:
+                    self.swap(player, *parts)
+                else:
+                    self.commands.whisper(player.nickname, "Wrong structure of function.")
+                    self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname 1> <nickname 2>"')
+            elif message == ".clear":
+                self.teams = [[], []]
+                if self.mode == "tourny":
+                    self.commands.modify_everyone(-1)
+            elif message == ".tourny":
+                if not self.teams[0] or not self.teams[1]:
+                    self.commands.message("Need at least one player per team to start a tournament!")
+                else:
+                    self.commands.assign_everyone(-1)
+                    for team in range(2):
+                        for player_found in self.teams[team]:
+                            self.commands.assign_team(player_found.nickname, team)
+                    self.commands.start_tournament()
+                    self.mode = "tourny"
+            elif message == ".stop":
+                if self.mode == "tourny":
+                    self.commands.stop_tournament()
+                self.mode = "stop"
+                self.commands.assign_everyone(-1)
+                self.commands.message("The game is stopped. No players will be allowed to spawn.")
+            elif message == ".free":
+                if self.mode == "tourny":
+                    self.commands.stop_tournament()
+                self.mode = "free"
+                self.commands.message("Free mode: everyone is allowed to spawn!")
+            elif message == ".teams":
+                if len(self.teams[0]) == 0:
+                    if len(self.teams[1]) == 0:
+                        self.commands.message("Teams are both empty!")
+                    else:
+                        self.commands.message("Left team is empty.")
+                        self.commands.message("Right team: {}".format(", ".join(
+                            [player_found.nickname for player_found in self.teams[1]])))
+                elif len(self.teams[1]) == 0:
+                    self.commands.message("Left team: {}".format(", ".join(
+                        [player_found.nickname for player_found in self.teams[0]])))
+                    self.commands.message("Right team is empty.")
+                else:
+                    for team_name, team in zip(["Left", "Right"], self.teams):
+                        self.commands.message("{} team: {}".format(team_name, ", ".join(
+                            [player_found.nickname for player_found in team])))
+            elif message == ".admin" or message == ".admins":
+                admins = []
+                for player_found in self.players.players:
+                    if player_found.vapor_id in self.admins:
+                        admins.append(player_found.nickname)
+                if admins:
+                    self.commands.message("Admin{} currently online: ".format("s" if len(admins) > 1 else '')
+                                          .join(admins))
 
     def on_spawn(self, player, plane, red_perk, green_perk, blue_perk, skin, team):
         if self.mode == "stop":
             self.commands.assign_team(player.nickname, -1)
-
-    def on_client_add(self, player):
-        self.commands.message("{} is joining...".format(player.nickname))
 
 
 if __name__ == '__main__':
