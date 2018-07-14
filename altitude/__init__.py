@@ -121,7 +121,8 @@ class AltitudeMod:
                 self.on_nickname_change(decoded['oldNickname'],
                                         self.players.player_from_nickname(decoded['newNickname']))
             elif event == "playerInfoEv":
-                self.players._on_player_info_ev(decoded['player'])
+                if not decoded['leaving']:
+                    self.players._on_player_info_ev(decoded['player'])
             elif event == "spawn":
                 self.on_spawn(self.players.player_from_player_id(decoded['player']),
                               *[decoded[argument] for argument in ['plane', 'perkRed', 'perkGreen',
