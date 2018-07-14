@@ -123,8 +123,10 @@ class FlightClub(AltitudeMod):
 
     def on_client_add(self, player):
         self.commands.message("{} is joining...".format(player.nickname))
-        # self.commands.message("Please welcome {} to flight club,".format(player.nickname))
-        # self.commands.message("the place where good alitutude happens!")
+
+    def on_client_join(self, player):
+        self.commands.message("Please welcome {} to flight club,".format(player.nickname))
+        self.commands.message("the place where good alitutude happens!")
 
     def check_if_admin(self, player):
         for admin in self.admins:
