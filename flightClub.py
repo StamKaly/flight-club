@@ -207,7 +207,7 @@ class FlightClub(AltitudeMod):
     def on_spawn(self, player, plane, red_perk, green_perk, blue_perk, skin, team):
         if self.mode == "stop":
             self.commands.assign_team(player.nickname, -1)
-        elif self.onelh and plane != "Biplane" and red_perk != "Heavy Cannon":
+        elif self.onelh and plane != "Biplane" or red_perk != "Heavy Cannon":
             position = self.find_position(team)
             if self.mode == "tourny":
                 self.commands.modify_tournament(player.nickname, position)
