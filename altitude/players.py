@@ -4,7 +4,7 @@ class Player:
         self.vapor_id = vapor_id
         self.player_id = player_id
         self.ip = ip
-        self.joined = False
+        self.not_joined = False
         self.loads_map = True
         self.joined_after_change_map = True
 
@@ -35,15 +35,15 @@ class Players:
 
     def _on_player_info_ev(self, player_id):
         player = [player for player in self.players if player.player_id == player_id][0]
-        if self.map_changed or hasattr(player, "joined"):
+        if self.map_changed or hasattr(player, "not_joined"):
             if player.loads_map and player.joined_after_change_map:
                 player.joined_after_change_map = False
             elif player.loads_map and not player.joined_after_change_map:
                 player.loads_map = False
                 player.joined_after_change_map = True
                 self.main.on_player_map_change(player, self.map_changed)
-                if hasattr(player, "joined"):
-                    del player.joined
+                if hasattr(player, "not_joined"):
+                    del player.not_joined
                     self.main.on_client_join(player)
             if self.check_if_everyone_joined_after_change_map():
                 self.map_changed = False

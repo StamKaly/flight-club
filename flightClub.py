@@ -1,4 +1,4 @@
-from altitude import AltitudeMod
+from altitude import AltitudeMod, teamno_to_team_colour
 
 
 class FlightClub(AltitudeMod):
@@ -207,6 +207,13 @@ class FlightClub(AltitudeMod):
     def on_spawn(self, player, plane, red_perk, green_perk, blue_perk, skin, team):
         if self.mode == "stop":
             self.commands.assign_team(player.nickname, -1)
+        elif self.onelh and plane != "Biplane" and red_perk != "Heavy Cannon":
+            position = self.find_position(teamno_to_team_colour(team))
+            if self.mode == "tourny":
+                self.commands.modify_tournament(player.nickname, position)
+            else:
+                self.commands.assign_team(player.nickname, position)
+            self.commands.whisper(player.nickname, "Only Biplane with Heavy Cannon is allowed in 1lh!")
 
 
 if __name__ == '__main__':
