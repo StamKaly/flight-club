@@ -141,15 +141,17 @@ class FlightClub(AltitudeMod):
                 if len(parts) == 2:
                     self.move(player, *parts)
                 else:
-                    self.commands.whisper(player.nickname, "Wrong structure of function.")
-                    self.commands.whisper(player.nickname, 'Please use it like this: ".move <nickname> <team>"')
+                    self.commands.multiple_whispers(player.nickname,
+                                                    ["Wrong structure of function.",
+                                                     'Please use it like this: ".move <nickname> <team>"'])
             elif message.startswith(".swap"):
                 parts = message.split()[1:]
                 if len(parts) == 2:
                     self.swap(player, *parts)
                 else:
-                    self.commands.whisper(player.nickname, "Wrong structure of function.")
-                    self.commands.whisper(player.nickname, 'Please use it like this: ".swap <nickname 1> <nickname 2>"')
+                    self.commands.multiple_whispers(player.nickname,
+                                                    ["Wrong structure of function.",
+                                                     'Please use it like this: ".swap <nickname 1> <nickname 2>"'])
             elif message == ".clear":
                 self.teams = [[], []]
                 if self.mode == "tourny":
